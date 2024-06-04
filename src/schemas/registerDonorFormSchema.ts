@@ -7,5 +7,5 @@ export const registerDonorFormSchema = z.object({
   address: z.string().min(4, { message: 'Mínimo 4 caracteres' }),
   phone: z
     .string()
-    .regex(/^\(\d{2}\) 9\d{4}-\d{4}$/, 'Formato: (99) 99999-9999'),
+    .regex(/^\(\d{2}\) \d{5}-\d{4}$/, 'Formato: (99) 99999-9999'),
 })
