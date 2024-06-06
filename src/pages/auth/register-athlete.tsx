@@ -35,8 +35,12 @@ const statusMessages = {
 export function ResgiterAthlete() {
   const [status, setStatus] = useState<Status>('register')
   const navigate = useNavigate()
-  const inputRef = useMask({
+  const inputTel = useMask({
     mask: '(__) _____-____',
+    replacement: { _: /\d/ },
+  })
+  const inputDateOfBirth = useMask({
+    mask: '__/__/____',
     replacement: { _: /\d/ },
   })
 
@@ -183,7 +187,7 @@ export function ResgiterAthlete() {
 
               <div className="space-y-2">
                 <FormLabel>
-                  Idade <span className="text-red-500">*</span>
+                  Data de Nascimento <span className="text-red-500">*</span>
                 </FormLabel>
                 <FormField
                   control={form.control}
@@ -195,8 +199,9 @@ export function ResgiterAthlete() {
                           id="age"
                           type="age"
                           required
-                          placeholder="Digite sua Idade"
+                          placeholder="Digite sua Data de Nascimento"
                           {...field}
+                          ref={inputDateOfBirth}
                         />
                       </FormControl>
                       <FormMessage />
@@ -244,7 +249,7 @@ export function ResgiterAthlete() {
                           required
                           placeholder="Digite seu Telefone"
                           {...field}
-                          ref={inputRef}
+                          ref={inputTel}
                         />
                       </FormControl>
                       <FormMessage />
