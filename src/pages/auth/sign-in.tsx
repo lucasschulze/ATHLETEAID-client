@@ -2,6 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { useForm } from 'react-hook-form'
+import { useSearchParams } from 'react-router-dom'
 import { toast } from 'sonner'
 import { z } from 'zod'
 
@@ -22,17 +23,18 @@ export type SignInFormSchema = z.infer<typeof signInFormSchema>
 type Status = 'signIn' | 'loading'
 
 const statusMessages = {
-  signIn: 'Login',
+  signIn: 'Entrar',
   loading: 'Carregando...',
 }
 
 export function SignIn() {
   const [status, setStatus] = useState<Status>('signIn')
+  const [searchParams] = useSearchParams()
 
   const form = useForm<SignInFormSchema>({
     resolver: zodResolver(signInFormSchema),
     defaultValues: {
-      email: '',
+      email: searchParams.get('email') ?? '',
       password: '',
     },
   })
@@ -135,7 +137,6 @@ export function SignIn() {
           Cadastrar
         </Button>
       </div>
-      {/* <img src={`data:image/jpeg;base64`} /> */}
     </>
   )
 }
