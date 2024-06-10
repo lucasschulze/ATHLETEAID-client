@@ -1,25 +1,25 @@
 import { api } from '@/lib/axios'
 
 export interface RegisterDonor {
-  name: string
+  nome: string
+  nascimento: string
+  telefone: string
   email: string
-  password: string
-  address: string
-  phone: string
+  senha: string
 }
 
 export async function registerDonor({
-  name,
+  nome,
+  nascimento,
+  telefone,
   email,
-  password,
-  address,
-  phone,
+  senha,
 }: RegisterDonor) {
   await api.post('/doadores', {
-    name,
+    nome,
+    nascimento,
+    telefone,
     email,
-    password,
-    address,
-    phone,
+    senha,
   })
 }

@@ -38,14 +38,19 @@ export function RegisterDonor() {
     replacement: { _: /\d/ },
   })
 
+  const inputDateOfBirth = useMask({
+    mask: '__/__/____',
+    replacement: { _: /\d/ },
+  })
+
   const form = useForm<RegisterDonorFormSchema>({
     resolver: zodResolver(registerDonorFormSchema),
     defaultValues: {
-      name: '',
+      nome: '',
+      nascimento: '',
+      telefone: '',
       email: '',
-      password: '',
-      address: '',
-      phone: '',
+      senha: '',
     },
   })
   const { reset } = form
@@ -59,11 +64,11 @@ export function RegisterDonor() {
       setStatus('loading')
 
       await registerDonorFn({
-        name: data.name,
+        nome: data.nome,
+        nascimento: data.nascimento,
+        telefone: data.telefone,
         email: data.email,
-        password: data.password,
-        address: data.address,
-        phone: data.phone,
+        senha: data.senha,
       })
 
       toast.success(`Cadastro Efetuado com Sucesso`, {
@@ -107,12 +112,12 @@ export function RegisterDonor() {
                 </FormLabel>
                 <FormField
                   control={form.control}
-                  name="name"
+                  name="nome"
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>
                         <Input
-                          id="name"
+                          id="nome"
                           type="text"
                           required
                           placeholder="Digite seu Nome"
@@ -150,18 +155,43 @@ export function RegisterDonor() {
                 />
               </div>
 
+              <div className="space-y-2">
+                <FormLabel>
+                  Data de Nascimento <span className="text-red-500">*</span>
+                </FormLabel>
+                <FormField
+                  control={form.control}
+                  name="nascimento"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          id="nascimento"
+                          type="nascimento"
+                          required
+                          placeholder="Digite sua Data de Nascimento"
+                          {...field}
+                          ref={inputDateOfBirth}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
               <div className="relative space-y-2">
                 <FormLabel>
                   Senha <span className="text-red-500">*</span>
                 </FormLabel>
                 <FormField
                   control={form.control}
-                  name="password"
+                  name="senha"
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>
                         <Input
-                          id="password"
+                          id="senha"
                           type="password"
                           required
                           placeholder="Digite sua senha"
@@ -181,13 +211,13 @@ export function RegisterDonor() {
                 </FormLabel>
                 <FormField
                   control={form.control}
-                  name="phone"
+                  name="telefone"
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>
                         <Input
-                          id="phone"
-                          type="phone"
+                          id="telefone"
+                          type="tel"
                           required
                           placeholder="Digite seu Telefone"
                           {...field}
@@ -199,30 +229,6 @@ export function RegisterDonor() {
                   )}
                 />
               </div>
-            </div>
-
-            <div className="space-y-2">
-              <FormLabel>
-                Endereço <span className="text-red-500">*</span>
-              </FormLabel>
-              <FormField
-                control={form.control}
-                name="address"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input
-                        id="address"
-                        type="address"
-                        required
-                        placeholder="Digite seu Endereço"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
             </div>
 
             <Button

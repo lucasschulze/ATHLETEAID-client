@@ -1,31 +1,28 @@
 import { api } from '@/lib/axios'
 
 export interface RegisterAthlete {
-  name: string
+  nome: string
+  genero: string
+  nascimento: string
+  telefone: string
   email: string
-  password: string
-  address: string
-  phone: string
-  age: string
-  gender: string
+  senha: string
 }
 
 export async function registerAthlete({
-  name,
+  nome,
+  genero,
+  nascimento,
+  telefone,
   email,
-  password,
-  address,
-  phone,
-  age,
-  gender,
+  senha,
 }: RegisterAthlete) {
-  await api.post('/athletes', {
-    name,
+  await api.post('/atletas', {
+    nome,
+    genero,
+    nascimento,
+    telefone,
     email,
-    password,
-    address,
-    phone,
-    age,
-    gender,
+    senha,
   })
 }

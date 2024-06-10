@@ -47,13 +47,12 @@ export function ResgiterAthlete() {
   const form = useForm<RegisterAthleteFormSchema>({
     resolver: zodResolver(registerAthleteFormSchema),
     defaultValues: {
-      name: '',
+      nome: '',
       email: '',
-      password: '',
-      address: '',
-      phone: '',
-      age: '',
-      gender: '',
+      senha: '',
+      telefone: '',
+      nascimento: '',
+      genero: '',
     },
   })
   const { reset } = form
@@ -67,13 +66,12 @@ export function ResgiterAthlete() {
       setStatus('loading')
 
       await registerAthleteFn({
-        name: data.name,
+        nome: data.nome,
+        genero: data.genero,
+        nascimento: data.nascimento,
+        telefone: data.telefone,
         email: data.email,
-        password: data.password,
-        address: data.address,
-        phone: data.phone,
-        age: data.age,
-        gender: data.gender,
+        senha: data.senha,
       })
 
       toast.success(`Cadastro Efetuado com Sucesso`, {
@@ -86,8 +84,8 @@ export function ResgiterAthlete() {
       setStatus('register')
 
       reset()
-    } catch {
-      toast.error(`Erro ao cadastrar Doador`)
+    } catch (err) {
+      toast.error(`Erro ao cadastrar Atleta`)
       setStatus('register')
     }
   }
@@ -117,12 +115,12 @@ export function ResgiterAthlete() {
                 </FormLabel>
                 <FormField
                   control={form.control}
-                  name="name"
+                  name="nome"
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>
                         <Input
-                          id="name"
+                          id="nome"
                           type="text"
                           required
                           placeholder="Digite seu Nome"
@@ -166,12 +164,12 @@ export function ResgiterAthlete() {
                 </FormLabel>
                 <FormField
                   control={form.control}
-                  name="password"
+                  name="senha"
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>
                         <Input
-                          id="password"
+                          id="senha"
                           type="password"
                           required
                           placeholder="Digite sua Senha"
@@ -191,13 +189,13 @@ export function ResgiterAthlete() {
                 </FormLabel>
                 <FormField
                   control={form.control}
-                  name="age"
+                  name="nascimento"
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>
                         <Input
-                          id="age"
-                          type="age"
+                          id="nascimento"
+                          type="nascimento"
                           required
                           placeholder="Digite sua Data de Nascimento"
                           {...field}
@@ -215,12 +213,12 @@ export function ResgiterAthlete() {
                 </FormLabel>
                 <FormField
                   control={form.control}
-                  name="gender"
+                  name="genero"
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>
                         <Input
-                          id="gender"
+                          id="genero"
                           type="text"
                           required
                           placeholder="Digite seu Gênero"
@@ -239,13 +237,13 @@ export function ResgiterAthlete() {
                 </FormLabel>
                 <FormField
                   control={form.control}
-                  name="phone"
+                  name="telefone"
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>
                         <Input
-                          id="phone"
-                          type="phone"
+                          id="telefone"
+                          type="tel"
                           required
                           placeholder="Digite seu Telefone"
                           {...field}
@@ -257,29 +255,6 @@ export function ResgiterAthlete() {
                   )}
                 />
               </div>
-            </div>
-            <div className="space-y-2">
-              <FormLabel>
-                Endereço <span className="text-red-500">*</span>
-              </FormLabel>
-              <FormField
-                control={form.control}
-                name="address"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input
-                        id="address"
-                        type="address"
-                        required
-                        placeholder="Digite seu Endereço"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
             </div>
 
             <Button
