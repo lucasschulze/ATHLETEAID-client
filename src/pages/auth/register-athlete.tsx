@@ -85,7 +85,6 @@ export function ResgiterAthlete() {
 
       reset()
     } catch (err) {
-      toast.error(`Erro ao cadastrar Atleta`)
       setStatus('register')
     }
   }

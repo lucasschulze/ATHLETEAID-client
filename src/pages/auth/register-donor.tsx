@@ -81,8 +81,7 @@ export function RegisterDonor() {
       setStatus('register')
 
       reset()
-    } catch {
-      toast.error(`Erro ao cadastrar Doador`)
+    } catch (error) {
       setStatus('register')
     }
   }
