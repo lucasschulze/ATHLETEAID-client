@@ -4,8 +4,8 @@ export interface GetCampaignResponse {
   titulo: string
   descricao: string
   meta_arrecadacao: number
-  valor_arrecadacao: number
-  status: string
+  valor_arrecadacao?: number
+  status?: string
 }
 
 export async function getCampaign() {

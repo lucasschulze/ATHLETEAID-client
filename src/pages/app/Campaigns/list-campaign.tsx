@@ -23,18 +23,17 @@ export function ListCampaign({ campaign }: CampaignProps) {
           <h3 className="mb-2 text-sm text-muted-foreground">
             {campaign.descricao}
           </h3>
-
+          <h3 className="mb-2 text-sm font-bold text-muted-foreground">
+            {campaign.meta_arrecadacao.toLocaleString('pt-BR', {
+              style: 'currency',
+              currency: 'BRL',
+            })}
+          </h3>
           <div className="flex items-center justify-between">
             <div>
               <CampaignStatus status={campaign.status} />
             </div>
             <div>
-              <Button size="sm" className="mr-2">
-                Editar
-              </Button>
-              <Button size="sm" className="mr-2" variant="destructive">
-                Excluir
-              </Button>
               <Link to={'/pagamento'}>
                 <Button size="sm" className="bg-emerald-500">
                   Doar
