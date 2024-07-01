@@ -3,11 +3,13 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { PlusCircle } from 'lucide-react'
 import { Helmet } from 'react-helmet-async'
 import { useForm } from 'react-hook-form'
+import { useSearchParams } from 'react-router-dom'
 import { toast } from 'sonner'
 import { z } from 'zod'
 
 import { createCampaign } from '@/api/createCampaign'
-import { getCampaign, GetCampaignResponse } from '@/api/get-campaign'
+import { getCampaign } from '@/api/get-campaign'
+import { Pagination } from '@/components/pagination'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -37,10 +39,25 @@ import { ListCampaign } from './list-campaign'
 export type CreateCampaignFormSchema = z.infer<typeof createCampaignFormSchema>
 
 export function Campaign() {
+  const [searchParams, setSearchParams] = useSearchParams()
+  const pageIndex = z.coerce
+    .number()
+    .transform((page) => page + 0)
+    .parse(searchParams.get('page') ?? '1')
+
   const { data: result } = useQuery({
-    queryKey: ['campaigns'],
-    queryFn: getCampaign,
+    queryKey: ['campaigns', pageIndex],
+    queryFn: () => getCampaign({ pageIndex }),
+    staleTime: 100 * 100 * 10, // 10 segundos
   })
+
+  function handlePaginate(pageIndex: number) {
+    setSearchParams((state) => {
+      state.set('page', (pageIndex + 1).toString())
+
+      return state
+    })
+  }
 
   const form = useForm<CreateCampaignFormSchema>({
     resolver: zodResolver(createCampaignFormSchema),
@@ -54,21 +71,8 @@ export function Campaign() {
 
   const { mutateAsync: createCampaignFn } = useMutation({
     mutationFn: createCampaign,
-    onSuccess(_, variables) {
-      queryClient.setQueryData<
-        Omit<GetCampaignResponse, 'valor_arrecadacao' | 'status'>[]
-      >(['campaigns'], (data) => {
-        if (data) {
-          return [
-            ...data,
-            {
-              titulo: variables.titulo,
-              descricao: variables.descricao,
-              meta_arrecadacao: variables.meta_arrecadacao,
-            },
-          ]
-        }
-      })
+    onSuccess() {
+      queryClient.invalidateQueries({ queryKey: ['campaigns'] })
     },
   })
 
@@ -91,7 +95,7 @@ export function Campaign() {
   return (
     <>
       <Helmet title="Campanhas" />
-      <div className="container mx-auto px-4 py-6">
+      <div className="px-4 py-1">
         <h1 className="mb-4 text-3xl font-bold">Campanhas</h1>
         <Dialog>
           <DialogTrigger asChild>
@@ -112,7 +116,7 @@ export function Campaign() {
                 className="space-y-6"
                 onSubmit={form.handleSubmit(handleCreateCampaign)}
               >
-                <div className="grid grid-cols-4 items-center gap-3 text-right">
+                <div className="grid grid-cols-4 items-center justify-between gap-3">
                   <FormLabel>
                     Título <span className="text-red-500">*</span>
                   </FormLabel>
@@ -137,7 +141,7 @@ export function Campaign() {
                   />
                 </div>
 
-                <div className="grid grid-cols-4 items-center gap-3 text-right">
+                <div className="grid grid-cols-4 items-center justify-between gap-3">
                   <FormLabel>
                     Descrição <span className="text-red-500">*</span>
                   </FormLabel>
@@ -160,7 +164,7 @@ export function Campaign() {
                   />
                 </div>
 
-                <div className="grid grid-cols-4 items-center gap-3 text-right">
+                <div className="grid grid-cols-4 items-center justify-between gap-3">
                   <FormLabel>
                     Arrecadação <span className="text-red-500">*</span>
                   </FormLabel>
@@ -173,6 +177,8 @@ export function Campaign() {
                           <Input
                             id="meta_arrecadacao"
                             type="number"
+                            step="0.01"
+                            min="0.01"
                             required
                             placeholder="Digite sua Arrecadação"
                             {...field}
@@ -198,10 +204,18 @@ export function Campaign() {
         </Dialog>
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {result?.map((campaing) => {
-            return <ListCampaign key={campaing.id} campaign={campaing} />
+          {result?.campanhas.map((campanhas) => {
+            return <ListCampaign key={campanhas.id} campanhas={campanhas} />
           })}
         </div>
+        {result && (
+          <Pagination
+            onPageChange={handlePaginate}
+            indiceDaPagina={result.meta.indiceDaPagina}
+            totalCampanha={result.meta.totalCampanhas}
+            itemsPorPagina={result.meta.itemsPorPagina}
+          />
+        )}
       </div>
     </>
   )

@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation } from '@tanstack/react-query'
 import { useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { useForm } from 'react-hook-form'
@@ -6,6 +7,7 @@ import { useSearchParams } from 'react-router-dom'
 import { toast } from 'sonner'
 import { z } from 'zod'
 
+import { signIn } from '@/api/sign-in'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -35,24 +37,39 @@ export function SignIn() {
     resolver: zodResolver(signInFormSchema),
     defaultValues: {
       email: searchParams.get('email') ?? '',
-      password: '',
+      senha: '',
     },
   })
   const { reset } = form
+
+  const { mutateAsync: signInFn } = useMutation({
+    mutationFn: signIn,
+  })
 
   async function handleRegisterDonor(data: SignInFormSchema) {
     try {
       setStatus('loading')
 
-      await new Promise((resolve) => setTimeout(resolve, 2000))
-
-      toast.success(`Login Efetuado com Sucesso ${data?.email}`)
+      await signInFn(
+        {
+          email: data.email,
+          senha: data.senha,
+        },
+        {
+          onSuccess: (data) => {
+            console.log(data.token)
+            toast.success('Login bem sucedido')
+            reset()
+          },
+        },
+      )
 
       setStatus('signIn')
 
       reset()
     } catch {
       toast.error(`Erro ao Realizar Login`)
+      setStatus('signIn')
     }
   }
 
@@ -105,12 +122,12 @@ export function SignIn() {
               </FormLabel>
               <FormField
                 control={form.control}
-                name="password"
+                name="senha"
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
                       <Input
-                        id="password"
+                        id="senha"
                         type="password"
                         required
                         placeholder="Digite sua senha"
