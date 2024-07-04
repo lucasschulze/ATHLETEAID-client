@@ -4,18 +4,18 @@ export interface GetCampaignQuery {
   pageIndex?: number | null
 }
 
-export interface Campanha {
+export interface Campaign {
   id: number
   titulo: string
   descricao: string
   meta_arrecadacao: number
-  valor_arrecadacao: number
+  valor_arrecadado: number
   status: 'ativo' | 'concluido' | 'pendente'
   created_at: string
 }
 
 export interface GetCampaignResponse {
-  campanhas: Campanha[]
+  campanhas: Campaign[]
   meta: {
     itemsPorPagina: number
     indiceDaPagina: number

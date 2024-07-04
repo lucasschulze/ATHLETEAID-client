@@ -1,7 +1,7 @@
 import { api } from '@/lib/axios'
 
 export interface CampaignDetailsParams {
-  id: string
+  idCampaign: number
 }
 
 export interface GetCampanhaDetailsResponse {
@@ -9,13 +9,15 @@ export interface GetCampanhaDetailsResponse {
   titulo: string
   descricao: string
   meta_arrecadacao: number
-  valor_arrecadacao: number
+  valor_arrecadado: number
   status: 'ativo' | 'concluido' | 'pendente'
   created_at: string
 }
 
-export async function getCampaign({ id }: CampaignDetailsParams) {
-  const response = await api.get<GetCampanhaDetailsResponse>(`/campanha/${id}`)
+export async function getCampaignId({ idCampaign }: CampaignDetailsParams) {
+  const response = await api.get<GetCampanhaDetailsResponse>(
+    `/campanha/${idCampaign}`,
+  )
 
   return response.data
 }

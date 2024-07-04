@@ -1,12 +1,12 @@
 /* eslint-disable camelcase */
 import { api } from '@/lib/axios'
 
-interface UpdateCampaignBody {
+export interface UpdateCampaignBody {
   id: number
   titulo: string
   descricao: string
   meta_arrecadacao: number
-  valor_arrecadacao: number
+  valor_arrecadado: number
   status: 'ativo' | 'concluido' | 'pendente'
 }
 
@@ -15,15 +15,16 @@ export async function updateCampaign({
   titulo,
   descricao,
   meta_arrecadacao,
-  valor_arrecadacao,
+  valor_arrecadado,
   status,
 }: UpdateCampaignBody) {
-  await api.put(`/campanhas/${id}`, {
+  const { data } = await api.put(`/campanha/${id}`, {
     id,
     titulo,
     descricao,
     meta_arrecadacao,
-    valor_arrecadacao,
+    valor_arrecadado,
     status,
   })
+  return data
 }

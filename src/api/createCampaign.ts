@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 import { api } from '@/lib/axios'
 
-import { Campanha } from './get-campaign'
+import { Campaign } from './get-campaign'
 
 export interface CreateCampaign {
   titulo: string
@@ -13,7 +13,7 @@ export async function createCampaign({
   titulo,
   descricao,
   meta_arrecadacao,
-}: CreateCampaign): Promise<Campanha> {
+}: CreateCampaign): Promise<Campaign> {
   const { data } = await api.post('/campanhas', {
     titulo,
     descricao,

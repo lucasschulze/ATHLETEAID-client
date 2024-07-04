@@ -3,28 +3,28 @@ import { ptBR } from 'date-fns/locale'
 
 interface CardContetProps {
   textTitle: string
-  textDescrition: string
+  textDescription: string
   textCreatedAt: string
-  textCurrent: number
+  textCurrency: number
 }
 
 export function CardContent({
   textTitle,
-  textDescrition,
+  textDescription,
   textCreatedAt,
-  textCurrent,
+  textCurrency,
 }: CardContetProps) {
   return (
     <div className="flex flex-col p-[0.8rem]">
       <h2 className="mt-1 truncate text-xl font-bold">{textTitle}</h2>
-      <p className="mb-2 line-clamp-1 block truncate text-sm text-muted-foreground">
-        {textDescrition}
+      <p className="mb-2 line-clamp-2 text-sm text-muted-foreground">
+        {textDescription}
       </p>
       <h3 className="mb-2 text-sm ">
         <strong className="font-bold text-muted-foreground">
           Meta de Arrecadação:{' '}
         </strong>{' '}
-        {textCurrent.toLocaleString('pt-BR', {
+        {textCurrency.toLocaleString('pt-BR', {
           style: 'currency',
           currency: 'BRL',
         })}

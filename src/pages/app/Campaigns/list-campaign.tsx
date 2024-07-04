@@ -16,7 +16,7 @@ export interface CampaignProps {
     titulo: string
     descricao: string
     meta_arrecadacao: number
-    valor_arrecadacao: number
+    valor_arrecadado: number
     status: 'ativo' | 'concluido' | 'pendente'
     created_at: string
   }
@@ -48,14 +48,14 @@ export function ListCampaign({ campanhas }: CampaignProps) {
     <>
       <Card.Root>
         <Card.Image
-          src="https://static.vakinha.com.br/uploads/vakinha/image/4903610/1719414379.102.png?ims=340x170"
+          src="https://www.ceara.gov.br/wp-content/uploads/2021/06/esej.jpeg"
           alt="Imagem Campanha"
         />
         <Card.Content
           textTitle={campanhas.titulo}
-          textDescrition={campanhas.descricao}
+          textDescription={campanhas.descricao}
           textCreatedAt={campanhas.created_at}
-          textCurrent={campanhas.meta_arrecadacao}
+          textCurrency={campanhas.meta_arrecadacao}
         />
         <Card.Actions
           textStatus={campanhas.status}

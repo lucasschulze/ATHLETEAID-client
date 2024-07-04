@@ -1,3 +1,5 @@
+import { DialogClose } from '@radix-ui/react-dialog'
+
 import { CampaignStatus } from '@/pages/app/Campaigns/campaign-status'
 
 import { Button } from '../ui/button'
@@ -33,14 +35,14 @@ export function CardActions({
           <Button
             size="sm"
             variant="default"
-            className="bg-emerald-500 hover:bg-emerald-600"
+            className="bg-emerald-900 hover:bg-emerald-800"
             onClick={onNavigateId}
           >
             Visualizar
           </Button>
           <Dialog>
             <DialogTrigger asChild>
-              <Button size="sm" variant="destructive">
+              <Button size="sm" className="bg-red-700 hover:bg-red-600">
                 Excluir
               </Button>
             </DialogTrigger>
@@ -52,9 +54,11 @@ export function CardActions({
                 </DialogDescription>
               </DialogHeader>
               <DialogFooter>
-                <Button type="button" variant="outline">
-                  Cancelar
-                </Button>
+                <DialogClose>
+                  <Button type="button" variant="outline">
+                    Cancelar
+                  </Button>
+                </DialogClose>
                 <Button
                   onClick={onDeleteAction}
                   type="button"
