@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { PlusCircle } from 'lucide-react'
+import { useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { useForm } from 'react-hook-form'
 import { useSearchParams } from 'react-router-dom'
@@ -39,6 +40,7 @@ import { ListCampaign } from './list-campaign'
 export type CreateCampaignFormSchema = z.infer<typeof createCampaignFormSchema>
 
 export function Campaign() {
+  const [openShowModal, setShowOpenModal] = useState(false)
   const [searchParams, setSearchParams] = useSearchParams()
   const pageIndex = z.coerce
     .number()
@@ -85,7 +87,7 @@ export function Campaign() {
       })
 
       toast.success('Campanha cadastro com sucesso')
-
+      setShowOpenModal(false)
       reset()
     } catch (error) {
       console.log(error)
@@ -97,7 +99,7 @@ export function Campaign() {
       <Helmet title="Campanhas" />
       <div className="px-4 py-1">
         <h1 className="mb-4 text-3xl font-bold">Campanhas</h1>
-        <Dialog>
+        <Dialog open={openShowModal} onOpenChange={setShowOpenModal}>
           <DialogTrigger asChild>
             <Button className="mb-4">
               <PlusCircle className="mr-2 size-4" />
