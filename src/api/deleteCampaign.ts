@@ -5,5 +5,5 @@ export interface DeleteCampaign {
 }
 
 export async function deleteCampaign({ id }: DeleteCampaign) {
-  await api.delete(`/campanha/${id}`)
+  await api.delete(`/campanhas/${id}`)
 }

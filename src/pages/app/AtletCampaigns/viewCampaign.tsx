@@ -52,9 +52,10 @@ export function ViewCampaign() {
     values: {
       titulo: resultViewCampaign?.titulo ?? '',
       descricao: resultViewCampaign?.descricao ?? '',
+      numero_time: resultViewCampaign?.numero_time ?? 0,
       meta_arrecadacao: resultViewCampaign?.meta_arrecadacao ?? 0,
       valor_arrecadado: resultViewCampaign?.valor_arrecadado ?? 0,
-      status: resultViewCampaign?.status ?? 'ativo',
+      conta_destino: resultViewCampaign?.conta_destino ?? ''
     },
   })
   const { reset } = form
@@ -63,14 +64,15 @@ export function ViewCampaign() {
     mutationFn: updateCampaign,
     onSuccess(
       _,
-      { titulo, descricao, meta_arrecadacao, valor_arrecadado, status },
+      { titulo, descricao, numero_time, meta_arrecadacao, valor_arrecadado, conta_destino },
     ) {
       queryClient.setQueryData(['campaigns', idCampaign], {
         titulo,
         descricao,
+        numero_time,
         meta_arrecadacao,
         valor_arrecadado,
-        status,
+        conta_destino
       })
     },
   })
@@ -81,12 +83,13 @@ export function ViewCampaign() {
         id: idCampaign,
         titulo: data.titulo,
         descricao: data.descricao,
+        numero_time: data.numero_time,
         meta_arrecadacao: data.meta_arrecadacao,
         valor_arrecadado: data.valor_arrecadado,
-        status: data.status,
+        conta_destino: data.conta_destino
       })
 
-      toast.success('Atualizado com Sucesso')
+      toast.success('Campanha atualizado com Sucesso')
       setOpenModal(false)
       reset()
     } catch (error) {
@@ -95,44 +98,39 @@ export function ViewCampaign() {
   }
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-8">
-      <div className="grid grid-cols-1 gap-8 overflow-hidden rounded-lg bg-white shadow-md md:grid-cols-2">
+    <div className="mx-auto max-w-4xl border bg-card px-4 py-8 text-card-foreground shadow-xl">
+      <div className="grid grid-cols-1 gap-8 overflow-hidden rounded-lg  shadow-md md:grid-cols-2">
         <div className="p-6">
-          <h2 className="text-justify text-2xl font-semibold text-gray-800">
+          <h2 className="text-justify text-2xl font-semibold ">
             {resultViewCampaign?.titulo}
           </h2>
-          <h2 className="mt-10 text-xl font-bold text-gray-600">Descrição:</h2>
-          <p className="mt-5 text-base text-gray-600">
-            {resultViewCampaign?.descricao}
-          </p>
+          <h2 className="mt-10 text-xl font-bold ">Descrição:</h2>
+          <p className="mt-5 text-base ">{resultViewCampaign?.descricao}</p>
           <div className="mt-4 space-y-5">
-            <p className="text-xl font-medium text-gray-900">
+            <p className="text-xl font-medium ">
               <strong>Meta Arrecadação: </strong>
-              {resultViewCampaign?.meta_arrecadacao.toLocaleString('pt-BR', {
+              {resultViewCampaign?.meta_arrecadacao}
+              {/* {resultViewCampaign?.meta_arrecadacao.toLocaleString('pt-BR', {
                 style: 'currency',
                 currency: 'BRL',
-              })}
+              })} */}
             </p>
-            <p className="text-xl font-medium text-gray-900">
+            <p className="text-xl font-medium ">
               <strong>Valor Arrecadado: </strong>
-              {resultViewCampaign?.valor_arrecadado.toLocaleString('pt-BR', {
-                style: 'currency',
-                currency: 'BRL',
-              })}
+              {resultViewCampaign?.valor_arrecadado}
             </p>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-foreground">
               {resultViewCampaign?.created_at &&
                 formatDistanceToNow(resultViewCampaign.created_at, {
                   locale: ptBR,
                   addSuffix: true,
                 })}
             </p>
-            <p className="text-sm text-gray-500">
-              {resultViewCampaign?.status}
-            </p>
             <Dialog open={openModal} onOpenChange={setOpenModal}>
               <DialogTrigger asChild>
-                <Button className="mb-4">Editar Campanha</Button>
+                <Button className="mb-4" variant="default">
+                  Editar Campanha
+                </Button>
               </DialogTrigger>
 
               <DialogContent>
@@ -196,7 +194,30 @@ export function ViewCampaign() {
 
                     <div className="grid grid-cols-4 items-center justify-between gap-3">
                       <FormLabel>
-                        Arrecadação <span className="text-red-500">*</span>
+                        Número do Time <span className="text-red-500">*</span>
+                      </FormLabel>
+                      <FormField
+                        control={form.control}
+                        name="numero_time"
+                        render={({ field }) => (
+                          <FormItem className="col-span-3">
+                            <FormControl>
+                              <Textarea
+                                id="numero_time"
+                                required
+                                placeholder="Digite sua Número do Time"
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-4 items-center justify-between gap-3">
+                      <FormLabel>
+                        Meta de Arrecadação <span className="text-red-500">*</span>
                       </FormLabel>
                       <FormField
                         control={form.control}
@@ -221,7 +242,7 @@ export function ViewCampaign() {
                     </div>
                     <div className="grid grid-cols-4 items-center justify-between gap-3">
                       <FormLabel>
-                        Arrecadado <span className="text-red-500">*</span>
+                        Valor de arrecadação <span className="text-red-500">*</span>
                       </FormLabel>
                       <FormField
                         control={form.control}
@@ -232,6 +253,8 @@ export function ViewCampaign() {
                               <Input
                                 id="valor_arrecadado"
                                 type="number"
+                                step="0.01"
+                                min="0.01"
                                 required
                                 placeholder="Digite sua Arrecadação"
                                 {...field}
@@ -244,17 +267,17 @@ export function ViewCampaign() {
                     </div>
                     <div className="grid grid-cols-4 items-center justify-between gap-3">
                       <FormLabel>
-                        Status <span className="text-red-500">*</span>
+                        Conta de Destino <span className="text-red-500">*</span>
                       </FormLabel>
                       <FormField
                         control={form.control}
-                        name="status"
+                        name="conta_destino"
                         render={({ field }) => (
                           <FormItem className="col-span-3">
                             <FormControl>
                               <Input
-                                id="status"
-                                type="text"
+                                id="conta_destino"
+                                type="number"
                                 required
                                 placeholder="Digite sua Arrecadação"
                                 {...field}

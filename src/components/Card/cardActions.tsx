@@ -1,7 +1,5 @@
 import { DialogClose } from '@radix-ui/react-dialog'
 
-import { CampaignStatus } from '@/pages/app/Campaigns/campaign-status'
-
 import { Button } from '../ui/button'
 import {
   Dialog,
@@ -14,14 +12,11 @@ import {
 } from '../ui/dialog'
 
 interface CardActionsProps {
-  textStatus: 'ativo' | 'concluido' | 'pendente'
-  navigateId: number
   onDeleteAction: () => void
   onNavigateId: () => void
 }
 
 export function CardActions({
-  textStatus,
   onNavigateId,
   onDeleteAction,
 }: CardActionsProps) {
@@ -29,20 +24,14 @@ export function CardActions({
     <div className="pb-4 pl-4 pr-2">
       <div className="flex w-full items-center justify-between">
         <div>
-          <CampaignStatus status={textStatus} />
         </div>
         <div className="flex gap-2 ">
-          <Button
-            size="sm"
-            variant="default"
-            className="bg-emerald-900 hover:bg-emerald-800"
-            onClick={onNavigateId}
-          >
+          <Button size="sm" variant="default" onClick={onNavigateId}>
             Visualizar
           </Button>
           <Dialog>
             <DialogTrigger asChild>
-              <Button size="sm" className="bg-red-700 hover:bg-red-600">
+              <Button type="button" variant="destructive">
                 Excluir
               </Button>
             </DialogTrigger>

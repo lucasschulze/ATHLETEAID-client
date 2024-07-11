@@ -5,5 +5,9 @@ interface CardRootProps {
 }
 
 export function CardRoot({ children }: CardRootProps) {
-  return <div className="rounded-xl shadow-xl">{children}</div>
+  return (
+    <div className="rounded-lg  border bg-card text-card-foreground shadow-xl">
+      {children}
+    </div>
+  )
 }

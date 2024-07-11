@@ -5,26 +5,29 @@ export interface UpdateCampaignBody {
   id: number
   titulo: string
   descricao: string
+  numero_time: number
   meta_arrecadacao: number
   valor_arrecadado: number
-  status: 'ativo' | 'concluido' | 'pendente'
+  conta_destino: string
 }
 
 export async function updateCampaign({
   id,
-  titulo,
-  descricao,
-  meta_arrecadacao,
-  valor_arrecadado,
-  status,
+  titulo, 
+  descricao, 
+  numero_time, 
+  meta_arrecadacao, 
+  valor_arrecadado, 
+  conta_destino 
 }: UpdateCampaignBody) {
-  const { data } = await api.put(`/campanha/${id}`, {
+  const { data } = await api.put(`/campanhas/${id}`, {
     id,
-    titulo,
-    descricao,
-    meta_arrecadacao,
-    valor_arrecadado,
-    status,
+    titulo, 
+    descricao, 
+    numero_time, 
+    meta_arrecadacao, 
+    valor_arrecadado, 
+    conta_destino 
   })
   return data
 }

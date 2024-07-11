@@ -15,9 +15,11 @@ export interface CampaignProps {
     id: number
     titulo: string
     descricao: string
+    numero_time: number
     meta_arrecadacao: number
     valor_arrecadado: number
-    status: 'ativo' | 'concluido' | 'pendente'
+    conta_destino: string
+    atleta_id: number
     created_at: string
   }
 }
@@ -58,8 +60,6 @@ export function ListCampaign({ campanhas }: CampaignProps) {
           textCurrency={campanhas.meta_arrecadacao}
         />
         <Card.Actions
-          textStatus={campanhas.status}
-          navigateId={campanhas.id}
           onDeleteAction={() => handleDeleteCampaign({ id: campanhas.id })}
           onNavigateId={() => navigate(`/campanha/${campanhas.id}`)}
         />

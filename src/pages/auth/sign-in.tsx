@@ -3,11 +3,10 @@ import { useMutation } from '@tanstack/react-query'
 import { useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { useForm } from 'react-hook-form'
-import { useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { toast } from 'sonner'
 import { z } from 'zod'
 
-import { signIn } from '@/api/sign-in'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -20,6 +19,8 @@ import {
 import { Input } from '@/components/ui/input'
 import { signInFormSchema } from '@/schemas/signInFormSchema'
 
+import { useAuth } from '../Context/useAuth'
+
 export type SignInFormSchema = z.infer<typeof signInFormSchema>
 
 type Status = 'signIn' | 'loading'
@@ -30,6 +31,15 @@ const statusMessages = {
 }
 
 export function SignIn() {
+  const auth = useAuth()
+
+  async function onFinish(values: { email: string; senha: string }) {
+    try {
+      await auth.authenticate(values.email, values.senha)
+    } catch (error) {
+      toast.error('Email ou senha inválida')
+    }
+  }
   const [status, setStatus] = useState<Status>('signIn')
   const [searchParams] = useSearchParams()
 
@@ -43,26 +53,17 @@ export function SignIn() {
   const { reset } = form
 
   const { mutateAsync: signInFn } = useMutation({
-    mutationFn: signIn,
+    mutationFn: onFinish,
   })
 
   async function handleRegisterDonor(data: SignInFormSchema) {
     try {
       setStatus('loading')
 
-      await signInFn(
-        {
-          email: data.email,
-          senha: data.senha,
-        },
-        {
-          onSuccess: (data) => {
-            console.log(data.token)
-            toast.success('Login bem sucedido')
-            reset()
-          },
-        },
-      )
+      await signInFn({
+        email: data.email,
+        senha: data.senha,
+      })
 
       setStatus('signIn')
 

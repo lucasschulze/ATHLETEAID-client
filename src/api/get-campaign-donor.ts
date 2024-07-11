@@ -25,8 +25,8 @@ export interface GetCampaignResponse {
   }
 }
 
-export async function getCampaign({ pageIndex }: GetCampaignQuery) {
-  const response = await api.get<GetCampaignResponse>('/atleta-campanhas', {
+export async function getCampaignDonor({ pageIndex }: GetCampaignQuery) {
+  const response = await api.get<GetCampaignResponse>('/campanha', {
     params: {
       pageIndex,
     },

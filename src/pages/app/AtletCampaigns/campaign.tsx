@@ -50,7 +50,7 @@ export function Campaign() {
   const { data: result } = useQuery({
     queryKey: ['campaigns', pageIndex],
     queryFn: () => getCampaign({ pageIndex }),
-    staleTime: 100 * 100 * 10, // 10 segundos
+    staleTime: 100, // 10 segundos
   })
 
   function handlePaginate(pageIndex: number) {
@@ -66,7 +66,10 @@ export function Campaign() {
     defaultValues: {
       titulo: '',
       descricao: '',
+      numero_time: 0,
       meta_arrecadacao: 0,
+      valor_arrecadado:  0,
+      conta_destino: ''
     },
   })
   const { reset } = form
@@ -83,7 +86,10 @@ export function Campaign() {
       await createCampaignFn({
         titulo: data.titulo,
         descricao: data.descricao,
+        numero_time: data.numero_time,
         meta_arrecadacao: data.meta_arrecadacao,
+        valor_arrecadado: data.valor_arrecadado,
+        conta_destino: data.conta_destino
       })
 
       toast.success('Campanha cadastro com sucesso')
@@ -101,7 +107,7 @@ export function Campaign() {
         <h1 className="mb-4 text-3xl font-bold">Campanhas</h1>
         <Dialog open={openShowModal} onOpenChange={setShowOpenModal}>
           <DialogTrigger asChild>
-            <Button className="mb-4">
+            <Button className="mb-4 ">
               <PlusCircle className="mr-2 size-4" />
               Nova Campanha
             </Button>
@@ -168,6 +174,32 @@ export function Campaign() {
 
                 <div className="grid grid-cols-4 items-center justify-between gap-3">
                   <FormLabel>
+                    Número do Time <span className="text-red-500">*</span>
+                  </FormLabel>
+                  <FormField
+                    control={form.control}
+                    name="numero_time"
+                    render={({ field }) => (
+                      <FormItem className="col-span-3">
+                        <FormControl>
+                        <Input
+                            id="numero_time"
+                            type="number"
+                            step="0.01"
+                            min="0.01"
+                            required
+                            placeholder="Digite sua meta de Arrecadação"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                <div className="grid grid-cols-4 items-center justify-between gap-3">
+                  <FormLabel>
                     Arrecadação <span className="text-red-500">*</span>
                   </FormLabel>
                   <FormField
@@ -182,7 +214,59 @@ export function Campaign() {
                             step="0.01"
                             min="0.01"
                             required
+                            placeholder="Digite seu valor já arrecadado"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                <div className="grid grid-cols-4 items-center justify-between gap-3">
+                  <FormLabel>
+                    Valor Arrecadado: <span className="text-red-500">*</span>
+                  </FormLabel>
+                  <FormField
+                    control={form.control}
+                    name="valor_arrecadado"
+                    render={({ field }) => (
+                      <FormItem className="col-span-3">
+                        <FormControl>
+                          <Input
+                            id="valor_arrecadado"
+                            type="number"
+                            step="0.01"
+                            min="0.01"
+                            required
                             placeholder="Digite sua Arrecadação"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                <div className="grid grid-cols-4 items-center justify-between gap-3">
+                  <FormLabel>
+                    Número da conta: <span className="text-red-500">*</span>
+                  </FormLabel>
+                  <FormField
+                    control={form.control}
+                    name="conta_destino"
+                    render={({ field }) => (
+                      <FormItem className="col-span-3">
+                        <FormControl>
+                          <Input
+                            id="conta_destino"
+                            type="number"
+                            step="0.01"
+                            min="0.01"
+                            required
+                            placeholder="Digite sua Conta "
                             {...field}
                           />
                         </FormControl>
@@ -206,16 +290,16 @@ export function Campaign() {
         </Dialog>
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {result?.campanhas.map((campanhas) => {
+          {result?.campanhas && result?.campanhas.map((campanhas) => {
             return <ListCampaign key={campanhas.id} campanhas={campanhas} />
           })}
         </div>
         {result && (
           <Pagination
             onPageChange={handlePaginate}
-            indiceDaPagina={result.meta.indiceDaPagina}
-            totalCampanha={result.meta.totalCampanhas}
-            itemsPorPagina={result.meta.itemsPorPagina}
+            indiceDaPagina={result.meta?.indiceDaPagina}
+            totalCampanha={result.meta?.totalCampanhas}
+            itemsPorPagina={result.meta?.itemsPorPagina}
           />
         )}
       </div>
